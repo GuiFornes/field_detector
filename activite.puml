@@ -1,12 +1,14 @@
-@startuml test
+@startuml nom
+start
 if (image) then
-  :Gaussian_blur()
-  :EqualizeHist()
-  :inRange()
-  :Dilate & Erode 
-  :Mask_final
-  stop
+  #palegreen:bitwise_and;
+  :terrain;
+else
+  :Gaussian_blur();
+  :EqualizeHist();
+  :inRange();
+  :Dilate & Erode; 
+  :Mask_final;
 endif
-#palegreen:bitwise_and
-:terrain
+stop
 @enduml
