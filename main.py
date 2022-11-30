@@ -1,11 +1,19 @@
-import pretreatment as pt
-import matplotlib as plt
-import cv2 as cv
+import time
 
+import cv2
+import field_detector as fd
 
-img = cv.imread('./images/test.png')
-pre_traited_image = pt.init_treatment(cv.imread('./images/test.png'))
-objects = pt.extract_object(pre_traited_image,img)
-k = pt.main_contour(objects)
-cv.imshow("img", pre_traited_image)
-cv.waitKey(0)
+# detector = fd.FieldDetector(cv2.imread('bounds_test.png'), debug=False)
+# masked = detector.process()
+# cv2.imshow('masked', masked)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+
+for i in range(1, 375):
+    image = cv2.imread("data/log1/{:0>3}-rgb.png".format(i))
+    detector = fd.FieldDetector(image)
+    masked = detector.process()
+    cv2.imshow('mask', masked)
+    cv2.waitKey(1)
+    time.sleep(0.1)
+cv2.destroyAllWindows()
