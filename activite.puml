@@ -1,18 +1,21 @@
-@startuml nom
+@startuml activite
 start
-group RGB
-  if (image) then
-  else
+:Image de départ en RGB;
+split
     :Gaussian_blur();
-end
-group HSV
+    #SteelBlue:Passage en YUV;
     :EqualizeHist();
+note left #FFAAAA: sur le canal Y
+    #SteelBlue:Passage en HSV;
     :inRange();
+note left #FFAAAA: Limites sur la couleur verte
+    #SteelBlue:Masque binaire;
     :Dilate & Erode; 
     :Mask_final;
-end
-  endif
-  #palegreen:bitwise_and;
+split again
+end split
+  :bitwise_and;
   :terrain;
 stop
 @enduml
+
