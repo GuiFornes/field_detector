@@ -1,14 +1,18 @@
 @startuml nom
 start
-if (image) then
+group RGB
+  if (image) then
+  else
+    :Gaussian_blur();
+end
+group HSV
+    :EqualizeHist();
+    :inRange();
+    :Dilate & Erode; 
+    :Mask_final;
+end
+  endif
   #palegreen:bitwise_and;
   :terrain;
-else
-  :Gaussian_blur();
-  :EqualizeHist();
-  :inRange();
-  :Dilate & Erode; 
-  :Mask_final;
-endif
 stop
 @enduml
