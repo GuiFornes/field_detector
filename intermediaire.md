@@ -22,11 +22,27 @@ que la plus grande pour obtenir le masque final.
 Enfin, pour avoir un rendu visuel, le mask est appliqué bit à bit sur l'image originale.
 ![Alt text](./activite.png?raw=true "Title")
 
-## Structure du projet
-Le fichier field_detector.py contient la classe FieldDetector contient une classe du même nom
+## Analyse et test des résultats 
+Le fichier `test.py` permet de tester la méthode sur une liste d'images données.
+Pour évaluer nos résultats , nous nous sommes basés sur les masques de référence fournis avec le sujet (`mask-field/log1/*`).
+L'évaluation est pour l'instant une simple différence pixel à pixel, pour obtenir un pourcentage d'erreur. 
+Le script renvoie la moyenne de ces erreurs.
+
+
+## Architecture du projet
+Le fichier `field_detector.py` contient une classe du même nom qui est composé de toutes les fonctions
+nécessaires au traitement de l'image fournie.
+Le fichier `main.py` est celui à lancer pour exécuter le projet. il peut se lancer au choix sur une vidéo pour 
+afficher le rendu en temps réel, ou sur une simple image pour étudier le processus plus en détail.
+
+## Parenthèse machine learning
+En parallèle de cela, nous avons mené des recherches sur les différents types d'algorithmes de traitement d'image par 
+intelligence artificielle. 
+Le choix le plus adapté serait une IA de segmentationde type R-CNN où MASK R-CNN, mais la complexité de la mise en oeuvre
+en plus des problèmes liés à la taille de la base de données nous ont fait abandonner cette piste pour ce projet.
+
 
 ## Suite du projet
-
-### problèmes
-
-### idées de solutions
+Il nous faudra par la suite continuer d'améliorer notre détection pure du terrain de foot.
+Il faudra aussi réfléchir à traiter plus en détail le cas des lignes blanches du terrain.
+Enfin nous pourrions imaginer une segmentation du terrain en fonction des lignes pour séparer les 2 cotés.
