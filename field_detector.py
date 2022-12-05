@@ -3,12 +3,15 @@ import cv2
 
 
 class FieldDetector:
-    lower_bound = (28, 30, 40)
-    upper_bound = (67, 228, 144)
+    # lower_bound = (28, 30, 40)
+    # upper_bound = (67, 228, 144)
     # lower_bound = (24, 62, 31)
     # upper_bound = (63, 255, 208)
     # lower_bound = (27, 50, 31)
     # upper_bound = (64, 199, 129)
+    # HSV equalized bounds :
+    lower_bound = (26, 6, 30)
+    upper_bound = (60, 240, 150)
     kernel = np.ones((5, 5), np.uint8)
 
     def __init__(self, image, debug=False):
@@ -30,9 +33,9 @@ class FieldDetector:
 
     def __pre_process(self):
         self.image = cv2.GaussianBlur(self.image, (3, 3), 0)
-        # self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2YCR_CB)
-        # self.image[:, :, 0] = cv2.equalizeHist(self.image[:, :, 0])
-        # self.image = cv2.cvtColor(self.image, cv2.COLOR_YCR_CB2BGR)
+        self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2HSV)
+        self.image[:, :, 1] = cv2.equalizeHist(self.image[:, :, 1])
+        self.image = cv2.cvtColor(self.image, cv2.COLOR_HSV2BGR)
 
     def __green_mask(self):
         hsv = cv2.cvtColor(self.image, cv2.COLOR_BGR2HSV)

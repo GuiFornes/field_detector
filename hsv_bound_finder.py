@@ -28,6 +28,10 @@ hMin = sMin = vMin = hMax = sMax = vMax = 0
 phMin = psMin = pvMin = phMax = psMax = pvMax = 0
 
 img = cv2.imread('images/bounds_test.png')
+img = cv2.GaussianBlur(img, (3, 3), 0)
+img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+img[:, :, 1] = cv2.equalizeHist(img[:, :, 1])
+img = cv2.cvtColor(img, cv2.COLOR_HSV2BGR)
 output = img
 waitTime = 33
 

@@ -3,10 +3,9 @@ start
 :Image de départ en RGB;
 split
     :Gaussian_blur();
-    #SteelBlue:Passage en YUV;
-    :EqualizeHist();
-note left #FFAAAA: sur le canal Y
     #SteelBlue:Passage en HSV;
+    :EqualizeHist();
+note left #FFAAAA: sur le canal S
     :inRange();
 note left #FFAAAA: Limites sur la couleur verte
     #SteelBlue:Masque binaire;
