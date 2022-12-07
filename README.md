@@ -34,7 +34,6 @@ Follow the option below that matches your case. We recommend using a virtual env
 
         pip install -r requirements.txt
 
-## 3. <a name="nonvirtual"></a> Installation with windows
 
 
 ## Usage
