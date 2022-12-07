@@ -14,20 +14,25 @@ class FieldDetector:
     upper_bound = (60, 240, 150)
     kernel = np.ones((5, 5), np.uint8)
 
-    def __init__(self, image, debug=False):
-        self.original = image
-        self.image = image.copy()
+    def __init__(self, image=None, debug=False):
+        self.original = None
+        self.image = None
+        self.mask = None
+        if image is not None:
+            self.update(image)
         self.debug = debug
-        self.mask = np.zeros(image.shape[:2], np.uint8)
 
     def show_image(self):
+        cv2.imshow('original', self.original)
+        cv2.moveWindow('original', 0, 0)
+        cv2.imshow('current', self.image)
+        cv2.moveWindow('current', 0, 1000)
+        cv2.imshow('mask', self.mask)
+        cv2.moveWindow('mask', 1000, 0)
+
+    def __show_image(self):
         if self.debug:
-            cv2.imshow('original', self.original)
-            cv2.moveWindow('original', 0, 0)
-            cv2.imshow('current', self.image)
-            cv2.moveWindow('current', 0, 1000)
-            cv2.imshow('mask', self.mask)
-            cv2.moveWindow('mask', 1000, 0)
+            self.show_image()
             cv2.waitKey(0)
             cv2.destroyAllWindows()
 
@@ -45,10 +50,41 @@ class FieldDetector:
         self.mask = cv2.erode(self.mask, self.kernel, iterations=1)
         self.mask = cv2.dilate(self.mask, self.kernel, iterations=1)
 
+        # filling holes totally surrounded by the detected field.
+        # tmp = cv2.copyMakeBorder(self.mask, 1, 1, 1, 1, cv2.BORDER_CONSTANT, value=0)
+        # tmp = cv2.floodFill(tmp, None, (0, 0), 255)[1]
+        # tmp_inv = cv2.bitwise_not(tmp)
+        # self.mask = self.mask | tmp_inv[1:-1, 1:-1]
+
     def __isolate_field(self):
         _, labels = cv2.connectedComponents(self.mask)
+
+        # find the biggest connected component
         largest_label = np.argmax(np.bincount(labels.flat)[1:]) + 1
         self.mask = np.where(labels == largest_label, 255, 0).astype(np.uint8)
+
+        # find the second biggest and select it too if it is big enough
+        if len(np.unique(labels)) > 2:
+            areas = np.bincount(labels.flatten())
+            areas[0] = 0
+            second_biggest = np.argsort(areas)[-2]
+            if areas[second_biggest] > 5000:
+                print("Second biggest area is {}".format(areas[second_biggest]))
+                self.mask = np.where(labels == second_biggest, 255, self.mask).astype(np.uint8)
+                # draw a straight line between the two biggest areas
+
+        # find and fill the convexe hull of the field
+        hull_list = []
+        contours, _ = cv2.findContours(self.mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        for i in range(len(contours)):
+            hull_list.append(cv2.convexHull(contours[i]))
+        cv2.drawContours(self.mask, hull_list, -1, 255, -1)
+
+        # if 2 convex hulls have common points, it will join them into new complete convex hull
+        if len(contours) > 1:
+            contours, _ = cv2.findContours(self.mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            hull = cv2.convexHull(contours[0])
+            cv2.drawContours(self.mask, [hull], -1, 255, -1)
 
     def get_mask(self):
         return self.mask
@@ -60,10 +96,8 @@ class FieldDetector:
 
     def process(self):
         self.__pre_process()
-        self.show_image()
         self.__green_mask()
-        self.show_image()
         self.__isolate_field()
-        self.show_image()
+        # self.__show_image()
         return cv2.bitwise_and(self.original, self.original, mask=self.mask)
 
