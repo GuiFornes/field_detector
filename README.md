@@ -65,5 +65,9 @@ _This option is not recommended due to the risk of library non-compatibilities o
     │   ├── ...
 
 Le fichier `field_detector.py` contient une classe du même nom qui est composée de toutes les fonctions nécessaires au traitement de l'image fournie.
+
 Le fichier `main.py` est celui à lancer pour exécuter le projet. Il peut se lancer au choix sur une vidéo pour afficher le rendu en temps réel, ou sur une simple image pour étudier le processus plus en détail.
+
 Le fichier `test.py` execute le projet sur une liste d'images exemple au masque prédéfini pour comparer les résultats.
+
+Le dossier `data` contient l'ensemble des images sources du projet, issues de 4 vidéos enregistrée par la caméra des robots de la RoboCup
