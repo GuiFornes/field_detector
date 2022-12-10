@@ -12,7 +12,7 @@ def percentage_of_correspondance(image1, image2):
 
 def intersection_on_union(image1, image2):
     """
-    Returns the percentage of pixels that are the same in both images.
+    Returns the intersection on union comparaison of two binary images.
     """
     return np.sum(np.logical_and(image1, image2)) / np.sum(np.logical_or(image1, image2))
 
@@ -32,7 +32,7 @@ for i in range(len(test)):
         detector.update(image)
         detector.process()
         percentages[n] = intersection_on_union(detector.get_mask(), target)
-        if percentages[n] > 1:
+        if percentages[n] < 0.95:
             detector.show_image()
             cv2.imshow('target', target)
             cv2.waitKey(0)
@@ -41,4 +41,4 @@ for i in range(len(test)):
 
 
 print(percentages)
-print("Pourcentage de précision sur {} images de test: {:<3}%".format(n-1, np.mean(percentages)*100))
+print("Pourcentage de précision intersection sur union sur {} images de test: {:<3}%".format(n-1, np.mean(percentages)*100))

@@ -12,14 +12,15 @@ else:
 
 # number of images in folder
 num_images = len([name for name in os.listdir(folder) if os.path.isfile(os.path.join(folder, name))])
-print("Number of images: {}".format(num_images))
 
+# processing each images in folder
 for i in range(1, num_images):
     image = cv2.imread(folder + "/{:0>3}-rgb.png".format(i))
     detector = fd.FieldDetector(image)
     masked = detector.process()
     cv2.imshow('mask', masked)
     if cv2.waitKey(1) & 0xFF == ord('q'):
+        print("Quitting... image number {}".format(i))
         break
-    time.sleep(0.07)
+    time.sleep(0.1)
 cv2.destroyAllWindows()

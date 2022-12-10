@@ -7,7 +7,7 @@ if len(sys.argv) > 1:
     filename = sys.argv[1]
 else:
     print("Usage: python3 main.py <image_path>\ntaking data/log1/001-rgb.png as default")
-    filename = 'data/log1/001-rgb.png'
+    filename = 'data/log4/031-rgb.png'
 
 detector = fd.FieldDetector(cv2.imread(filename), debug=True)
 masked = detector.process()

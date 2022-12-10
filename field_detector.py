@@ -23,6 +23,7 @@ class FieldDetector:
         self.debug = debug
 
     def show_image(self):
+        """ display different steps of the process """
         cv2.imshow('original', self.original)
         cv2.moveWindow('original', 0, 0)
         cv2.imshow('current', self.image)
@@ -31,24 +32,27 @@ class FieldDetector:
         cv2.moveWindow('mask', 1000, 0)
 
     def __show_image(self):
+        """ private method tho show image when debug is True """
         if self.debug:
             self.show_image()
             cv2.waitKey(0)
             cv2.destroyAllWindows()
 
     def __pre_process(self):
+        """ apply preprocessing to the image"""
         self.image = cv2.GaussianBlur(self.image, (3, 3), 0)
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2HSV)
         self.image[:, :, 1] = cv2.equalizeHist(self.image[:, :, 1])
         self.image = cv2.cvtColor(self.image, cv2.COLOR_HSV2BGR)
 
     def __green_mask(self):
+        """ threshold the image to keep only green pixels """
         hsv = cv2.cvtColor(self.image, cv2.COLOR_BGR2HSV)
         self.mask = cv2.inRange(hsv, self.lower_bound, self.upper_bound)
         self.mask = cv2.dilate(self.mask, self.kernel, iterations=1)
         self.mask = cv2.erode(self.mask, self.kernel, iterations=1)
-        self.mask = cv2.erode(self.mask, self.kernel, iterations=1)
-        self.mask = cv2.dilate(self.mask, self.kernel, iterations=1)
+        self.mask = cv2.erode(self.mask, self.kernel, iterations=2)
+        self.mask = cv2.dilate(self.mask, self.kernel, iterations=2)
 
         # filling holes totally surrounded by the detected field.
         # tmp = cv2.copyMakeBorder(self.mask, 1, 1, 1, 1, cv2.BORDER_CONSTANT, value=0)
@@ -57,6 +61,7 @@ class FieldDetector:
         # self.mask = self.mask | tmp_inv[1:-1, 1:-1]
 
     def __isolate_field(self):
+        """ isolate the field from the image """
         _, labels = cv2.connectedComponents(self.mask)
 
         # find the biggest connected component
@@ -82,6 +87,20 @@ class FieldDetector:
         # if 2 convex hulls have common points, it will join them into new complete convex hull
         if len(contours) > 1:
             contours, _ = cv2.findContours(self.mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            # find moment of 2 biggest areas
+            moments = [cv2.moments(contours[i]) for i in range(len(contours))]
+            # draw a line between the 2 points
+            for i in range(len(contours)):
+                for j in range(i + 1, len(contours)):
+                    # find the center of each area
+                    center_i = (int(moments[i]['m10'] / moments[i]['m00']),
+                                int(moments[i]['m01'] / moments[i]['m00']))
+                    center_j = (int(moments[j]['m10'] / moments[j]['m00']),
+                                int(moments[j]['m01'] / moments[j]['m00']))
+                    # draw a line between the 2 centers
+                    cv2.line(self.mask, center_i, center_j, 255, 5)
+
+            contours, _ = cv2.findContours(self.mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             hull = cv2.convexHull(contours[0])
             cv2.drawContours(self.mask, [hull], -1, 255, -1)
 
@@ -98,9 +117,11 @@ class FieldDetector:
             print("Pre-processing...")
         self.__pre_process()
         if self.debug:
+            self.__show_image()
             print("Thresholding green color...")
         self.__green_mask()
         if self.debug:
+            self.__show_image()
             print("Isolating football field...")
         self.__isolate_field()
         # self.__show_image()
