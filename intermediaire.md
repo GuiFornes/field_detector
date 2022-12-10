@@ -27,10 +27,9 @@ Enfin, pour avoir un rendu visuel, le mask est appliqué bit à bit sur l'image 
 ## Analyse et test des résultats 
 
 Le fichier `test.py` permet de tester la méthode sur une liste d'images données.
-Pour évaluer nos résultats , nous nous sommes basés sur les masques de référence fournies avec le sujet (`mask-field/log1/*`).
+Pour évaluer nos résultats, nous nous sommes basés sur les masques de référence fournies avec le sujet (`mask-field/log1/*`).
 L'évaluation est pour l'instant une simple différence pixel à pixel, pour obtenir un pourcentage d'erreur. 
-Le script renvoie la moyen
-ne de ces erreurs.
+Le script renvoie la moyenne de ces erreurs.
 
 
 ## Architecture du projet
