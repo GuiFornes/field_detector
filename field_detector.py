@@ -69,7 +69,6 @@ class FieldDetector:
             areas[0] = 0
             second_biggest = np.argsort(areas)[-2]
             if areas[second_biggest] > 5000:
-                print("Second biggest area is {}".format(areas[second_biggest]))
                 self.mask = np.where(labels == second_biggest, 255, self.mask).astype(np.uint8)
                 # draw a straight line between the two biggest areas
 
@@ -95,8 +94,14 @@ class FieldDetector:
         self.mask = np.zeros(image.shape[:2], np.uint8)
 
     def process(self):
+        if self.debug:
+            print("Pre-processing...")
         self.__pre_process()
+        if self.debug:
+            print("Thresholding green color...")
         self.__green_mask()
+        if self.debug:
+            print("Isolating football field...")
         self.__isolate_field()
         # self.__show_image()
         return cv2.bitwise_and(self.original, self.original, mask=self.mask)
