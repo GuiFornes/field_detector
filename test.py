@@ -32,7 +32,7 @@ for i in range(len(test)):
         detector.update(image)
         detector.process()
         percentages[n] = intersection_on_union(detector.get_mask(), target)
-        if percentages[n] < 0.95:
+        if percentages[n] < 0.98:
             detector.show_image()
             cv2.imshow('target', target)
             cv2.waitKey(0)

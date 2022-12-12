@@ -22,7 +22,7 @@ que la plus grande pour obtenir le masque final.
 
 Enfin, pour avoir un rendu visuel, le mask est appliqué bit à bit sur l'image originale.
 
-![Alt text](./montage.png?raw=true "Title")
+![Alt text](./images/montage.png?raw=true "Title")
 
 ## Analyse et test des résultats 
 
