@@ -79,6 +79,7 @@ Le fichier `test.py` execute le projet sur une liste d'images exemple au masque 
 il affiche par la même occasion les masques résultats les moins précis.
 
 Quelques illustrations des éléments qui peuvent perturber notre perception du terrain :
+L'image en haut à gauche est l'originale, en bas à gauche post pré-traitement, en haut à droite le masque obtenu et en bas à droite le masque cible fourni dans le sujet.
 
 ![Alt text](./images/erreur1.png?raw=true "Title")
 Figure 1 : Erreur venant d'un élément extérieur (ici une personne)
