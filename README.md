@@ -52,6 +52,7 @@ _This option is not recommended due to the risk of library non-compatibilities o
         python3 test.py 
 
 ## Project structure
+
     .
     ├── README.md
     ├── requirements.txt
@@ -67,7 +68,9 @@ _This option is not recommended due to the risk of library non-compatibilities o
 
 ### Project files
 Le fichier `field_detector.py` contient une classe du même nom qui est composée de toutes les fonctions nécessaires au traitement de l'image fournie.
+
 Le fichier `main.py` est celui à lancer pour exécuter le projet. Il peut se lancer au choix sur une vidéo pour afficher le rendu en temps réel, ou sur une simple image pour étudier le processus plus en détail.
+
 Les dossiers `data` et `mask-field` contiennent respectivement les images à traiter et des masques solutions exemples pour certaines d'entre-elles
 
 ### Test file
